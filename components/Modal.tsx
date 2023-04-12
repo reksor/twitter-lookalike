@@ -37,7 +37,7 @@ const Modal: React.FC <ModalProps> = ({
         onSubmit()
     },[disabled,onSubmit]);
 
-    if(!open){
+    if(!isOpen){
         return null;
     }
 

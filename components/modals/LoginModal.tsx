@@ -7,7 +7,7 @@ const LoginModal = () => {
     const loginModal=useLoginModal();
 
     const [email,setEmail]=useState('');
-    const [passowrd,setPassword]=useState('');
+    const [password,setPassword]=useState('');
     const [isLoading,setIsLoading]=useState(false);
 
     const onSubmit=useCallback(async()=>{
@@ -37,7 +37,7 @@ const bodyContent=(
           <Input 
         placeholder="Password"
         onChange={(e)=>setPassword(e.target.value)}
-        value={passowrd}
+        value={password}
         disabled={isLoading}
         />
     </div>
