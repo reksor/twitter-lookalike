@@ -9,8 +9,8 @@ const SidebarSweetButton = () => {
     const loginModal= useLoginModal()
 
     const onClick= useCallback(()=>{
-
-    },[])
+      loginModal.onOpen()
+    },[loginModal])
 
     return (
         <div onClick={onClick}>
