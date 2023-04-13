@@ -1,5 +1,6 @@
 import {format} from "date-fns"
 import { useMemo } from "react";
+import { BiCalendar } from "react-icons/bi";
 
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUser from "@/hooks/useUser";
@@ -38,8 +39,46 @@ const UserBio: React.FC<UserBioProps> = ({userId}) => {
                     <p className="text-white text-2xl font-semibold">
                     {fetchedUser?.name}
                     </p>
+                    <p className="text-md text-red-600">
+                    @{fetchedUser?.username}
+                    </p>
                 </div>
-            
+            <div className="flex flex-col mt-4">
+                <p className="text-white">
+                {fetchedUser?.bio}
+                </p>
+                <div className="
+                flex
+                flex-row
+                items-center
+                gap-2
+                mt-4
+                text-red-600
+                ">
+                    <BiCalendar size={24}/>
+                    <p>
+                        Joined {createdAt}
+                    </p>
+                </div>
+            </div>
+            <div className="flex flex-row items-center mt-4 gap-6">
+                <div className="flex flex-row items-center gap-1">
+                    <p className="text-red-600">
+                        {fetchedUser?.followingIds?.length}
+                    </p>
+                    <p className="text-red-600">
+                        Following
+                    </p>
+                </div>
+                <div className="flex flex-row items-center gap-1">
+                    <p className="text-red-600">
+                        {fetchedUser?.followersCount || 0}
+                    </p>
+                    <p className="text-red-600">
+                        Followers
+                    </p>
+                </div>
+            </div>
         </div>
     </div> 
     );
