@@ -7,13 +7,13 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import Avatar from "../Avatar";
 
 interface PostItemProps{
-    //Record??
+    
     data: Record<string, any>;
     userid?: string
 }
 
 const PostItem: React.FC<PostItemProps> = ({
-    data,
+    data={},
     userid
 }) => {
 
@@ -60,7 +60,7 @@ return formatDistanceToNowStrict(new Date(data.createdAt))
         border-neutral-800
         p-5
         cursor-pointer
-        hover:bg-neutral-900
+        hover:bg-neutral-700
         transition
         "
         >

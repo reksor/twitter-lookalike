@@ -31,6 +31,7 @@ export default async function handler(
             const {userId}=req.query;
 
             let posts;
+
             if(userId && typeof userId==="string"){
                 posts=await prisma.post.findMany({
                     where: {
@@ -42,7 +43,7 @@ export default async function handler(
                     },
                     orderBy:{
                         createdAt:'desc'
-                    }
+                    },
                 })
             }else{
                 posts= await prisma.post.findMany({
