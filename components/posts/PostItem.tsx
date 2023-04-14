@@ -6,24 +6,26 @@ import useLoginModal from "@/hooks/useLoginModal";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Avatar from "../Avatar";
 import { AiOutlineMessage } from "react-icons/ai";
-import { AiOutlineGift } from "react-icons/ai";
+import { AiOutlineGift, AiFillGift } from "react-icons/ai";
+import useLike from "@/hooks/useLike";
 
 
 interface PostItemProps{
     
     data: Record<string, any>;
-    userid?: string
+    userId?: string
 }
 
 const PostItem: React.FC<PostItemProps> = ({
     data={},
-    userid
+    userId
 }) => {
 
 const router =useRouter()
 const loginModal=useLoginModal();
 
 const {data: currentUser}=useCurrentUser();
+const {hasLiked, toggleLike}=useLike({postId: data.id, userId})
 
 const goToUser=useCallback((event:any)=>{
     //overwrite global onClick parant
@@ -44,7 +46,9 @@ if(!currentUser){
 return loginModal.onOpen();
 }
 
-},[loginModal]);
+toggleLike()
+
+},[loginModal,currentUser,toggleLike]);
 
 const createdAt = useMemo(()=>{
 if(!data?.createdAt) {
@@ -54,6 +58,7 @@ if(!data?.createdAt) {
 return formatDistanceToNowStrict(new Date(data.createdAt))
 },[data.createdAt]);
 
+const LikeIcon= hasLiked? AiFillGift : AiOutlineGift
 
     return ( 
         <div 
@@ -99,7 +104,7 @@ return formatDistanceToNowStrict(new Date(data.createdAt))
                     </div>
                     <div className="flex flex-row items-center mt-3 gap-10">
                     <div
-                        onClick={onLike}
+                        onClick={()=>{}}
                         className="
                         flex
                         flex-row
@@ -118,6 +123,7 @@ return formatDistanceToNowStrict(new Date(data.createdAt))
                         </div>
                         
                         <div
+                        onClick={onLike}
                         className="
                         flex
                         flex-row
@@ -129,9 +135,9 @@ return formatDistanceToNowStrict(new Date(data.createdAt))
                         hover:text-red-600
                         "
                         >
-                            <AiOutlineGift size={20}/>
+                            <LikeIcon size={20} color={hasLiked? "red": ""}/>
                             <p>
-                                {data.comments?.length || 0}
+                                {data.likedIds.length}
                             </p>
                         </div>
 

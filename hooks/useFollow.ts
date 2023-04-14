@@ -30,8 +30,7 @@ const useFollow = (userId: string)=>{
                 //in delete we need "data" bc this is how it will accept the body
                 console.log("Is Following");
                 
-                request = () => axios.delete("/api/follow", {data: {userId}});
-                console.log("Is Followinggg");
+                request = () => axios.delete('/api/follow', {data: {userId}});
             }else{
                 //in "post" req you can just pass the body
                 console.log("Isnt Following");
@@ -45,7 +44,7 @@ const useFollow = (userId: string)=>{
         
             toast.success("SWEEET")
 
-        }catch(err){
+        }catch(error){
             toast.error("Something went wrong")
         }
 

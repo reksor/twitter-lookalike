@@ -13,7 +13,7 @@ const {data:posts= [] }=usePosts(userId)
         <>
         {posts.map((post: Record<string, any>,)=>(
             <PostItem
-            userid={userId}
+            userId={userId}
             key={post.id}
             data={post}
             />
