@@ -7,15 +7,15 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import useUser from "@/hooks/useUser";
 import useEditModal from "@/hooks/useEditModal";
 import Modal from "../Modal";
-import { title } from "process";
 import Input from "../Input";
+import ImageUpload from "../ImageUpload";
 
 const EditModal = () => {
 
     const {data:currentUser}=useCurrentUser();
     const {mutate:mutateFetchedUser}=useUser(currentUser?.id);
     
-    const editModal=useEditModal()
+    const editModal=useEditModal();
 
     const [name,setName]=useState('');
     const [username,setUsername]=useState('');
@@ -26,11 +26,11 @@ const EditModal = () => {
     const [isLoading,setIsLoading]=useState(false)
 
     useEffect(()=>{
+        setName(currentUser?.name)
+        setUsername(currentUser?.username)
+        setBio(currentUser?.bio)
         setProfileImage(currentUser?.profileImage)
         setCoverImage(currentUser?.coverImage)
-        setBio(currentUser?.bio)
-        setUsername(currentUser?.username)
-        setName(currentUser?.name)
     },[
         currentUser?.name,
         currentUser?.username,
@@ -50,6 +50,7 @@ const EditModal = () => {
             profileImage,
             coverImage
         });
+        
         mutateFetchedUser();
 
         //WHAT DOES TOAST DO
@@ -59,6 +60,8 @@ const EditModal = () => {
 
         }catch(error){
             toast.error("Something went wrong ://")
+            console.log("Brock Lesnar");
+            
         }
         finally{
             setIsLoading(false)
@@ -67,6 +70,18 @@ const EditModal = () => {
 
 const bodyContent=(
     <div className="flex flex-col gap-4">
+        <ImageUpload 
+        value={profileImage}
+        disabled={isLoading}
+        onChange={(image)=>setProfileImage(image)}
+        label="Upload profile picture"
+        />
+        <ImageUpload 
+        value={coverImage}
+        disabled={isLoading}
+        onChange={(image)=>setCoverImage(image)}
+        label="Upload cover picture"
+        />
         <Input
         placeholder="Name"
         onChange={(e)=> setName(e.target.value)}
