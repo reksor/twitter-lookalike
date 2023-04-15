@@ -1,6 +1,6 @@
 import serverAuth from "@/libs/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
-import  prisma  from '../../libs/prismaDb';
+import  prisma  from '../../../libs/prismaDb';
 import { json } from "stream/consumers";
 
 export default async function handler(
@@ -13,19 +13,15 @@ export default async function handler(
 
     try{
         
-        const {userId}=req.body;
+        const {userId}=req.query;
 
-        const {currentUser}= await serverAuth(req,res);
+        const {currentUser: user}= await serverAuth(req,res);
 
-        if(!userId || typeof userId!=="string"){
+        if(!userId || typeof userId !== "string"){
             throw new Error("Invalid ID")
         }
 
-        const user= await prisma.user.findUnique({
-            where:{
-                id: userId
-            }
-        });
+        
 
         if(!user){
             throw new Error("Invalid ID")
@@ -39,14 +35,17 @@ export default async function handler(
         
 
         if(req.method ==="DELETE"){
+
             
             updatedFollowingIds=updatedFollowingIds.filter((follwingId)=>
-                {follwingId!== userId})
+                {follwingId !== userId})
         }
 
+        console.log("updatedFollowingIds=", updatedFollowingIds);
+        
         const updatedUser= await prisma.user.update({
             where:{
-                id:currentUser.id
+                id:user.id
             },
             data:{
                 followingIds:updatedFollowingIds

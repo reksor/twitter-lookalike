@@ -9,6 +9,7 @@ import usePosts from "@/hooks/usePosts";
 import useRegisterModal from "@/hooks/useRegisterModal";
 import Button from "./Button";
 import Avatar from "./Avatar";
+import usePost from "@/hooks/usePost";
 
 interface FormProps {
     placeholder: string;
@@ -25,22 +26,28 @@ const Form: React.FC<FormProps> = ({
 const registerModal=useRegisterModal();
 const loginModal=useLoginModal();
 
-const {data:currentUser}=useCurrentUser()
-const {mutate: mutatePosts}=usePosts(postId as string)
+const {data: currentUser} = useCurrentUser();
+const {mutate: mutatePosts} = usePosts();
+const {mutate: mutatePost}=usePost(postId as string)
 
 const [body, setBody]=useState('');
-const [isLoading,setIsLoading]=useState(false)
+const [isLoading,setIsLoading]=useState(false);
 
-const onSubmit=useCallback(async ()=>{
+const onSubmit = useCallback(async ()=>{
 try{
     setIsLoading(true);
 
-    await axios.post('/api/posts',{body});
+    const url=isComment 
+    ? `/api/comments?postId=${postId}`
+    : "/api/posts"
+
+    await axios.post(url, {body});
 
     toast.success("Sweet Sent");
 
     setBody('');
-    mutatePosts()
+    mutatePosts();
+    mutatePost();
 
 }catch(error){
     toast.error('Something went wrong')
@@ -48,11 +55,11 @@ try{
 } finally{
     setIsLoading(false)
 }
-},[body,mutatePosts])
+},[body,mutatePosts,isComment,postId,mutatePost])
 
     return ( 
         <div className="border-b-[1px] border-neutral-800 px-5 py-2">
-            {currentUser ?(
+            {currentUser ? (
                 <div className="flex flex-row gap-4">
                     <div >
                         <Avatar userId={currentUser?.id}/>
@@ -60,7 +67,7 @@ try{
                     <div className="w-full">
                         <textarea
                         disabled={isLoading}
-                        onChange={(e)=>setBody(e.target.value)}
+                        onChange={(event)=>setBody(event.target.value)}
                         value={body}
                         className="
                         disabled:opacity-80
@@ -90,7 +97,8 @@ try{
                         ">
                         </hr>
                         <div className="mt-4 flex flex-row justify-end">
-                        <Button label="Sweet" 
+                        <Button 
+                        label="Sweet" 
                         secondary
                         disabled={isLoading || !body}
                         onClick={onSubmit}

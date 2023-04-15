@@ -1,5 +1,6 @@
 import Form from "@/components/Form";
 import Header from "@/components/Header";
+import CommentFeed from "@/components/posts/CommentFeed";
 import PostItem from "@/components/posts/PostItem";
 import usePost from "@/hooks/usePost";
 import { useRouter } from "next/router";
@@ -18,6 +19,8 @@ if(isLoading || !fetchedPost){
         </div>
     )
 }
+console.log(fetchedPost, "THIS IS IT");
+
 
     return ( 
     <>
@@ -27,6 +30,9 @@ if(isLoading || !fetchedPost){
     postId={postId as string}
     isComment
     placeholder="Something sweet to say?"
+    />
+    <CommentFeed
+    comments={fetchedPost?.comments}
     />
     </>);
 }

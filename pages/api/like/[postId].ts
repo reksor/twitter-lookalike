@@ -1,6 +1,6 @@
 import serverAuth from "@/libs/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
-import  prisma  from '../../libs/prismaDb';
+import  prisma  from '../../../libs/prismaDb';
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,7 +11,7 @@ export default async function handler(
     }
 
     try{
-        const {postId}=req.body;
+        const {postId}=req.query;
 
         const {currentUser}=await serverAuth(req,res);
 
@@ -25,30 +25,43 @@ export default async function handler(
             }
         });
 
+        console.log("Current POSt", post);
+        
+
         if(!post){
             throw new Error("Invalid ID")
         }
 
+        console.log("Current user=",currentUser, postId , post);
+
         let updatedLikedIds=[...(post.likedIds || [])];
+
+        console.log("updatedLikedIds",updatedLikedIds);
 
         if(req.method==="POST"){
             updatedLikedIds.push(currentUser.id)
         }
 
+        
         if(req.method === "DELETE"){
             updatedLikedIds=updatedLikedIds.filter((likedId) =>{
-                likedId!== currentUser.id
+               return likedId !== currentUser.id
+                
             })
         }
 
         const updatedPost= await prisma.post.update({
             where: {
-                id: postId
+                id: postId,
             },
             data: {
-                likedIds:updatedLikedIds
+                likedIds: updatedLikedIds
             }
         })
+        console.log('updated likes',updatedLikedIds);
+        
+        console.log('updated post',updatedPost);
+        
 
         return res.status(200).json(updatedPost)
 

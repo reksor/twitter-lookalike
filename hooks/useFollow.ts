@@ -24,21 +24,7 @@ const useFollow = (userId: string)=>{
         }
 
         try{
-            let request;
-
-            if(isFollowing){
-                //in delete we need "data" bc this is how it will accept the body
-                console.log("Is Following");
-                
-                request = () => axios.delete('/api/follow', {data: {userId}});
-            }else{
-                //in "post" req you can just pass the body
-                console.log("Isnt Following");
-                request=()=> axios.post('/api/follow', {userId})
-            }
-            
-
-            await request();
+            await axios[isFollowing ? 'delete':'post'](`/api/follow/${userId}`)
             mutateCurrentUser();
             mutateFetchedUser();
         
