@@ -5,9 +5,13 @@ import Avatar from "../Avatar";
 
 interface CommentItemProps{
     data: Record <string, any> ;
+    
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({data={}}) => {
+
+    console.log("single comment",data);
+    
 
     const router=useRouter();
 
@@ -15,14 +19,14 @@ const CommentItem: React.FC<CommentItemProps> = ({data={}}) => {
         event.stopPropagation()
 
         router.push(`/users/${data.user.id}`)
-    },[data.user.id,router]);
+    },[data.user.id, router]);
 
     const createdAt=useMemo(()=>{
         if(!data?.createdAt){
             return null
         }
         return formatDistanceToNowStrict(new Date(data.createdAt))
-    },[data.createdAt])
+    },[data?.createdAt])
 
     return ( 
     <div className="

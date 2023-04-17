@@ -25,18 +25,18 @@ export default async function handler(
             }
         });
 
-        console.log("Current POSt", post);
+        // console.log("Current POSt", post);
         
 
         if(!post){
             throw new Error("Invalid ID")
         }
 
-        console.log("Current user=",currentUser, postId , post);
+       
 
         let updatedLikedIds=[...(post.likedIds || [])];
 
-        console.log("updatedLikedIds",updatedLikedIds);
+        // console.log("updatedLikedIds",updatedLikedIds);
 
         if(req.method==="POST"){
             updatedLikedIds.push(currentUser.id)
@@ -58,9 +58,9 @@ export default async function handler(
                 likedIds: updatedLikedIds
             }
         })
-        console.log('updated likes',updatedLikedIds);
+        // console.log('updated likes',updatedLikedIds);
         
-        console.log('updated post',updatedPost);
+        // console.log('updated post',updatedPost);
         
 
         return res.status(200).json(updatedPost)

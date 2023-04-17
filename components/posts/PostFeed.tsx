@@ -3,7 +3,6 @@ import PostItem from "./PostItem";
 
 interface PostFeedProps{
     userId?: string;
-
 }
 
 const PostFeed:React.FC<PostFeedProps> = ({userId}) => {

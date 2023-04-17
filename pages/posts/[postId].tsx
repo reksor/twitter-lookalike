@@ -12,16 +12,17 @@ const {postId}=router.query;
 
 const {data:fetchedPost, isLoading}=usePost(postId as string)
 
-if(isLoading || !fetchedPost){
-    return(
-        <div className="flex justify-center items-center h-full">
-            <ClipLoader color="red" size={80}/>
-        </div>
-    )
-}
-console.log(fetchedPost, "THIS IS IT");
+    if(isLoading || !fetchedPost){
+        return(
+            <div className="flex justify-center items-center h-full">
+                <ClipLoader color="red" size={80}/>
+            </div>
+        )
+    }
 
+    //console.log(fetchedPost, "THIS IS IT");
 
+    
     return ( 
     <>
     <Header label="Sweet" showBackArrow/>
@@ -31,6 +32,7 @@ console.log(fetchedPost, "THIS IS IT");
     isComment
     placeholder="Something sweet to say?"
     />
+
     <CommentFeed
     comments={fetchedPost?.comments}
     />

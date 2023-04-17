@@ -34,6 +34,9 @@ const [body, setBody]=useState('');
 const [isLoading,setIsLoading]=useState(false);
 
 const onSubmit = useCallback(async ()=>{
+
+    // console.log("SHREK",body);
+    
 try{
     setIsLoading(true);
 

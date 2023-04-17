@@ -36,13 +36,12 @@ export default async function handler(
 
         if(req.method ==="DELETE"){
 
-            
             updatedFollowingIds=updatedFollowingIds.filter((follwingId)=>
                 {follwingId !== userId})
         }
 
-        console.log("updatedFollowingIds=", updatedFollowingIds);
         
+
         const updatedUser= await prisma.user.update({
             where:{
                 id:user.id
@@ -57,6 +56,7 @@ export default async function handler(
     }catch(err){
         console.log(err);
         console.log("BROCK");
+
         
         return res.status(400).end()
         

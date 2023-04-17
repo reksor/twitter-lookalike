@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../libs/prismaDb"
+import  comment  from "../comments";
 
 export default async function handler(
     req: NextApiRequest,
@@ -25,13 +26,18 @@ export default async function handler(
                 comments: {
                     include:{
                         user:true
+                        
                     },
                     orderBy: {
                         createdAt: "desc"
                     }
-                }
-            }
-        })
+                },
+            },
+        });
+      
+
+        // console.log("Gosho",post);
+
 
         return res.status(200).json(post)
 

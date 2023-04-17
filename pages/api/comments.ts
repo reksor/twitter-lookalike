@@ -1,6 +1,7 @@
 import serverAuth from "@/libs/serverAuth";
 import { NextApiRequest, NextApiResponse } from "next";
 import  prisma  from '../../libs/prismaDb';
+import {} from "./posts/[postId]";
 
 export default async function handler(
     req: NextApiRequest,
@@ -15,6 +16,9 @@ export default async function handler(
         const {body}=req.body;
         const {postId}=req.query;
 
+        console.log("body and postId",body,postId);
+        
+
         if(!postId || typeof postId!=="string"){
             throw new Error("Invalid ID")
         }
@@ -22,9 +26,12 @@ export default async function handler(
             data:{
                 body,
                 userId: currentUser.id,
-                postId
+                postId: postId
             }
         });
+        // console.log("COMMENT SHOULD BE HERE",comment);
+        console.log(body);
+        
 
         return res.status(200).json(comment);
 
