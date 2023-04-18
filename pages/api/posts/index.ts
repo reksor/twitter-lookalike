@@ -30,9 +30,13 @@ export default async function handler(
         if(req.method==="GET"){
             const {userId}=req.query;
 
+            // console.log(userId);
+            
+
             let posts;
 
             if(userId && typeof userId==="string"){
+                console.log("POST IN index if");
                 posts=await prisma.post.findMany({
                     where: {
                         userId
@@ -46,6 +50,7 @@ export default async function handler(
                     },
                 })
             }else{
+                console.log("POST IN index else");
                 posts= await prisma.post.findMany({
                     include:{
                         user:true,
@@ -55,7 +60,10 @@ export default async function handler(
                         createdAt:'desc'
                     }
                 });
+                // console.log(posts);
+                
             }
+            console.log("POST IN index");
 
             return res.status(200).json(posts);
 

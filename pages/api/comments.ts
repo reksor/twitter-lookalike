@@ -16,7 +16,8 @@ export default async function handler(
         const {body}=req.body;
         const {postId}=req.query;
 
-        console.log("body and postId",body,postId);
+
+        // console.log("body and postId",body,postId);
         
 
         if(!postId || typeof postId !== "string"){
@@ -26,51 +27,78 @@ export default async function handler(
             data:{
                 body,
                 userId: currentUser.id,
-                postId: postId
+                postId
             }
         });
 
-        const post = await prisma.post.update({
-            where: {
-                id: postId
-            },
-            data:
-            comment
-        })
+        // console.log(comment);
+        
+
+
+        // const post= await prisma.post.update({
+        //     where:{
+        //         id:postId
+        //     },
+        //     data: {
+        //         comments: {
+        //             body:body,
+        //             userId: currentUser.id,
+        //             postId:
+        //         }
+        //     }
+        // })
+
 
         
-        // try{
-        //     const post= await prisma.post.findUnique({
-        //         where: {
-        //             id: postId
+        // const post= await prisma.post.findUnique({
+        //     where: {
+        //         id: postId
+        //     }})
+
+        //     await prisma.post.update({
+        //         where:{
+        //             id:postId
+        //         },
+        //         data:{
+        //             comments: comment
         //         }
-        //     });
+        //     })
 
-        //     if(post?.userId){
-        //         await prisma.notification.create({
-        //             data: {
-        //                 body: 'Someone commented on your sweet!',
-        //                 userId: post.userId
-        //             }
-        //         });
+        
+        try{
+            const post= await prisma.post.findUnique({
+                where: {
+                    id: postId
+                }
+            });
 
-        //         await prisma.user.update({
-        //             where: {
-        //                 id: post.userId
-        //             },
-        //             data: {
-        //                 hasNotifications: true
-        //             }
-        //         })
-        //     }
+            if(post?.userId){
+                await prisma.notification.create({
+                    data: {
+                        body: 'Someone commented on your sweet!',
+                        userId: post.userId
+                    }
+                });
 
-        // }catch(error)
-        // {
-        //     console.log(error);
-        // }
+                await prisma.user.update({
+                    where: {
+                        id: post.userId
+                    },
+                    data: {
+                        hasNotifications: true
+                    }
+                })
+            }
+
+        }catch(error)
+        {
+            console.log(error);
+        }
 
         // console.log("COMMENT SHOULD BE HERE",comment);
-        console.log(body);
+        // console.log(body);
+
+        console.log("POST IN comments");
         
 
         return res.status(200).json(comment);

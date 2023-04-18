@@ -1,3 +1,4 @@
+import useCurrentUser from "@/hooks/useCurrentUser";
 import useLoginModal from "@/hooks/useLoginModal";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
@@ -7,10 +8,16 @@ const SidebarSweetButton = () => {
 
     const router=useRouter();
     const loginModal= useLoginModal()
+    const {data: currentUser}=useCurrentUser()
 
     const onClick= useCallback(()=>{
-      loginModal.onOpen()
-    },[loginModal])
+      if(!currentUser)
+     { 
+      return loginModal.onOpen()
+    }
+
+    router.push('/')
+    },[loginModal,currentUser,router])
 
     return (
         <div onClick={onClick}>

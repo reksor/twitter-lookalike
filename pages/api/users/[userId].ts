@@ -20,11 +20,20 @@ export default async function handler(
         const existingUser= await prisma.user.findUnique({
             where: {
                 id: userId
+
+            },
+
+            //
+            include:{
+                comments:true,
+                posts: true,
+                notifications:true,
             }
         })
 
         const followersCount = await prisma.user.count({
             where:{
+
                 followingIds: {
                     has: userId
                 }

@@ -25,10 +25,12 @@ export default async function handler(
                 user: true,
                 comments: {
                     include:{
-                        user:true
+                        user:true,
+                        
+
                     },
-                    orderBy: {
-                        createdAt: "desc"
+                    orderBy:{
+                        createdAt: 'desc'
                     }
                 },
             },
@@ -36,6 +38,9 @@ export default async function handler(
       
 
         // console.log("Gosho",post);
+
+        console.log("POST IN POSTS");
+        
 
 
         return res.status(200).json(post)

@@ -32,7 +32,6 @@ const {data:fetchedPost, isLoading}=usePost(postId as string)
     isComment
     placeholder="Something sweet to say?"
     />
-
     <CommentFeed
     comments={fetchedPost?.comments}
     />

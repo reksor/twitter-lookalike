@@ -15,8 +15,8 @@ const CommentItem: React.FC<CommentItemProps> = ({data={}}) => {
 
     const router=useRouter();
 
-    const goToUser=useCallback((event: any)=>{
-        event.stopPropagation()
+    const goToUser=useCallback((ev: any)=>{
+        ev.stopPropagation()
 
         router.push(`/users/${data.user.id}`)
     },[data.user.id, router]);
@@ -26,7 +26,7 @@ const CommentItem: React.FC<CommentItemProps> = ({data={}}) => {
             return null
         }
         return formatDistanceToNowStrict(new Date(data.createdAt))
-    },[data?.createdAt])
+    },[data.createdAt])
 
     return ( 
     <div className="

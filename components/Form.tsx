@@ -33,6 +33,9 @@ const {mutate: mutatePost}=usePost(postId as string)
 const [body, setBody]=useState('');
 const [isLoading,setIsLoading]=useState(false);
 
+
+console.log("POST ID =>>",postId, "iS COMMENT=>>",isComment);
+
 const onSubmit = useCallback(async ()=>{
 
     // console.log("SHREK",body);
@@ -47,6 +50,7 @@ try{
     await axios.post(url, {body});
 
     toast.success("Sweet Sent");
+
 
     setBody('');
     mutatePosts();

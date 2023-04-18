@@ -72,8 +72,7 @@ export default async function handler(
             }
             
         }
-
-        
+ 
         if(req.method === "DELETE"){
             updatedLikedIds=updatedLikedIds.filter((likedId) =>{
                return likedId !== currentUser.id
@@ -89,11 +88,7 @@ export default async function handler(
                 likedIds: updatedLikedIds
             }
         })
-        // console.log('updated likes',updatedLikedIds);
-        
-        // console.log('updated post',updatedPost);
-        
-
+ 
         return res.status(200).json(updatedPost)
 
     }catch(error){

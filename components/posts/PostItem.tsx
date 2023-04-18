@@ -5,9 +5,11 @@ import { formatDistanceToNowStrict } from "date-fns";
 import useLoginModal from "@/hooks/useLoginModal";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Avatar from "../Avatar";
-import { AiOutlineMessage } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineMessage } from "react-icons/ai";
 import { AiOutlineGift, AiFillGift } from "react-icons/ai";
 import useLike from "@/hooks/useLike";
+import useDelete from "@/hooks/useDelete";
+import { redirect } from "next/dist/server/api-utils";
 
 
 interface PostItemProps{
@@ -26,6 +28,7 @@ const loginModal=useLoginModal();
 
 const {data: currentUser}=useCurrentUser();
 const {hasLiked, toggleLike}=useLike({postId: data.id, userId})
+const {isCreator, toggleDelete}=useDelete({postId: data.id, userId})
 
 const goToUser=useCallback((event:any)=>{
     //overwrite global onClick parant
@@ -50,6 +53,22 @@ toggleLike()
 
 },[loginModal,currentUser,toggleLike]);
 
+
+const onDelete=useCallback((event: any)=>{
+event.stopPropagation();
+if(!currentUser){
+    return loginModal.onOpen()
+}
+toggleDelete()
+return {
+    redirect: {
+        destination: '/',
+        permanent: false,
+    }
+}
+
+},[loginModal,currentUser,toggleDelete])
+
 const createdAt = useMemo(()=>{
 if(!data?.createdAt) {
     return null;
@@ -58,7 +77,10 @@ if(!data?.createdAt) {
 return formatDistanceToNowStrict(new Date(data.createdAt))
 },[data.createdAt]);
 
-const LikeIcon= hasLiked? AiFillGift : AiOutlineGift
+const LikeIcon= hasLiked? AiFillGift : AiOutlineGift;
+
+const DeleteIcon= isCreator? AiOutlineDelete : null
+
 
     return ( 
         <div 
@@ -140,6 +162,25 @@ const LikeIcon= hasLiked? AiFillGift : AiOutlineGift
                                 {data.likedIds.length}
                             </p>
                         </div>
+                    
+                        <div
+                        onClick={onDelete}
+                        className="
+                        flex
+                        flex-row
+                        items-center
+                        text-neutral-500
+                        gap-2
+                        cursor-pointer
+                        transition
+                        hover:text-red-600
+                        "
+                        >
+                            <AiOutlineDelete size={20}/>
+                            <p>
+                                Delete
+                            </p>
+                        </div>
 
                        
                     </div>
@@ -151,3 +192,7 @@ const LikeIcon= hasLiked? AiFillGift : AiOutlineGift
 }
  
 export default PostItem;
+
+function toggleDelete() {
+    throw new Error("Function not implemented.");
+}
