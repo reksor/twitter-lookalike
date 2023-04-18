@@ -5,7 +5,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import useLoginModal from "@/hooks/useLoginModal";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Avatar from "../Avatar";
-import { AiOutlineDelete, AiOutlineMessage } from "react-icons/ai";
+import { AiFillApple, AiOutlineDelete, AiOutlineMessage } from "react-icons/ai";
 import { AiOutlineGift, AiFillGift } from "react-icons/ai";
 import useLike from "@/hooks/useLike";
 import useDelete from "@/hooks/useDelete";
@@ -79,7 +79,7 @@ return formatDistanceToNowStrict(new Date(data.createdAt))
 
 const LikeIcon= hasLiked? AiFillGift : AiOutlineGift;
 
-const DeleteIcon= isCreator? AiOutlineDelete : null
+const DeleteIcon= isCreator? AiOutlineDelete : AiFillApple
 
 
     return ( 
@@ -163,6 +163,7 @@ const DeleteIcon= isCreator? AiOutlineDelete : null
                             </p>
                         </div>
                     
+
                         <div
                         onClick={onDelete}
                         className="
@@ -176,10 +177,11 @@ const DeleteIcon= isCreator? AiOutlineDelete : null
                         hover:text-red-600
                         "
                         >
-                            <AiOutlineDelete size={20}/>
+                            <DeleteIcon size={20} visibility={isCreator? 'visible' : 'hidden'}/>
                             <p>
                                 
                             </p>
+                           
                         </div>
 
                        
