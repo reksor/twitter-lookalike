@@ -178,7 +178,7 @@ const DeleteIcon= isCreator? AiOutlineDelete : null
                         >
                             <AiOutlineDelete size={20}/>
                             <p>
-                                Delete
+                                
                             </p>
                         </div>
 
