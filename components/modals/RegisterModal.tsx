@@ -40,6 +40,17 @@ const RegisterModal = () => {
                 return
             }
 
+            if(password.length < 6){
+                toast.error("Password must be at least 6 letters")
+                return
+            }
+
+            let check=email;
+            if(check.split(check) && !check.includes("@")){
+                toast.error("Must be a valid E-mail")
+                return
+            }
+
             await axios.post('/api/register',{
                 email,
                 password,
