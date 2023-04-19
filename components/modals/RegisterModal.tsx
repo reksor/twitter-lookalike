@@ -35,6 +35,11 @@ const RegisterModal = () => {
 
             //extract body from register.ts and store here
 
+            if(!email || !username|| !password|| !name){
+                toast.error("Missing fieled")
+                return
+            }
+
             await axios.post('/api/register',{
                 email,
                 password,
