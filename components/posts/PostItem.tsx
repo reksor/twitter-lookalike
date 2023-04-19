@@ -5,7 +5,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import useLoginModal from "@/hooks/useLoginModal";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Avatar from "../Avatar";
-import { AiFillApple, AiOutlineDelete, AiOutlineMessage } from "react-icons/ai";
+import {  AiOutlineDelete, AiOutlineMessage } from "react-icons/ai";
 import { AiOutlineGift, AiFillGift } from "react-icons/ai";
 import useLike from "@/hooks/useLike";
 import useDelete from "@/hooks/useDelete";
@@ -54,18 +54,13 @@ toggleLike()
 },[loginModal,currentUser,toggleLike]);
 
 
-const onDelete=useCallback((event: any)=>{
+const onDelete = useCallback((event: any)=>{
 event.stopPropagation();
 if(!currentUser){
     return loginModal.onOpen()
 }
 toggleDelete()
-return {
-    redirect: {
-        destination: '/',
-        permanent: false,
-    }
-}
+router.push(`/`)
 
 },[loginModal,currentUser,toggleDelete])
 
@@ -79,7 +74,6 @@ return formatDistanceToNowStrict(new Date(data.createdAt))
 
 const LikeIcon= hasLiked? AiFillGift : AiOutlineGift;
 
-const DeleteIcon= isCreator? AiOutlineDelete : AiFillApple
 
 
     return ( 
@@ -163,7 +157,6 @@ const DeleteIcon= isCreator? AiOutlineDelete : AiFillApple
                             </p>
                         </div>
                     
-
                         <div
                         onClick={onDelete}
                         className="
@@ -177,7 +170,7 @@ const DeleteIcon= isCreator? AiOutlineDelete : AiFillApple
                         hover:text-red-600
                         "
                         >
-                            <DeleteIcon size={20} visibility={isCreator? 'visible' : 'hidden'}/>
+                            <AiOutlineDelete size={20} visibility={isCreator? 'visible' : 'hidden'}/>
                             <p>
                                 
                             </p>

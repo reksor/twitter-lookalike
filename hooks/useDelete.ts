@@ -14,16 +14,22 @@ const useDelete= ({postId, userId}:{postId: string, userId?: string})=>
 
     const loginModal=useLoginModal();
 
+    let togg=false
+
     const isCreator=useMemo(()=>{
+
+        
         if(fetcedPost?.userId!==currentUser?.id) {
             console.log("You are not the creator of this sweet")
+            togg=false
             return
         }
-        console.log("fetched post user id and current user",fetcedPost?.userId,currentUser.id);
-        
+        // console.log("fetched post user id and current user",fetcedPost?.userId,currentUser.id);
+        togg=true
+        return (togg)
+    },[currentUser?.id, fetcedPost?.userId, togg]);
 
-        return (currentUser?.id)
-    },[currentUser?.id, fetcedPost?.userId]);
+
 
     const toggleDelete=useCallback(async()=>{
         if(!currentUser){
@@ -33,7 +39,7 @@ const useDelete= ({postId, userId}:{postId: string, userId?: string})=>
         try{
             let request;
 
-            if(isCreator){
+            if(togg){
                 request=()=>axios.delete(`/api/edit/${postId}`);
             }else{
                 return
