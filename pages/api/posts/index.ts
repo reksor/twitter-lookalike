@@ -27,12 +27,13 @@ export default async function handler(
             return res.status(200).json(post)
         }
 
-        if(req.method==="GET"){
-            const {userId}=req.query;
+        if(req.method === "GET"){
+            const { userId } = req.query;
+            console.log('query',userId);
 
-            // console.log(userId);
+            const {usId}=req.body;
+            console.log("body" , usId);
             
-
             let posts;
 
             if(userId && typeof userId==="string"){

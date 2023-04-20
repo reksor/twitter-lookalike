@@ -39,7 +39,7 @@ export default async function handler(
 
         // console.log("Gosho",post);
 
-        console.log("POST IN POSTS");
+        // console.log("POST IN POSTS");
         
 
 

@@ -71,7 +71,7 @@ const RegisterModal = () => {
 
         } catch(error){
             console.log(error);
-            toast.error("Something went wrong, Not sweet :/")
+            toast.error("E-mail already taken :/")
             
         }finally{
             setIsLoading(false)

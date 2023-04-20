@@ -153,7 +153,7 @@ const LikeIcon= hasLiked? AiFillGift : AiOutlineGift;
                         >
                             <LikeIcon size={20} color={hasLiked? "red": ""}/>
                             <p>
-                                {data.likedIds.length}
+                                {data.likedIds?.length}
                             </p>
                         </div>
                     
