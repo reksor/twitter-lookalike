@@ -5,23 +5,22 @@ import { useCallback } from "react";
 import { FaFeather } from "react-icons/fa";
 
 const SidebarSweetButton = () => {
+  const router = useRouter();
+  const loginModal = useLoginModal();
+  const { data: currentUser } = useCurrentUser();
 
-    const router=useRouter();
-    const loginModal= useLoginModal()
-    const {data: currentUser}=useCurrentUser()
-
-    const onClick= useCallback(()=>{
-      if(!currentUser)
-     { 
-      return loginModal.onOpen()
+  const onClick = useCallback(() => {
+    if (!currentUser) {
+      return loginModal.onOpen();
     }
 
-    router.push('/')
-    },[loginModal,currentUser,router])
+    router.push("/");
+  }, [loginModal, currentUser, router]);
 
-    return (
-        <div onClick={onClick}>
-            <div className="
+  return (
+    <div onClick={onClick}>
+      <div
+        className="
             mt-6
             lg:hidden
             rounded-full
@@ -36,11 +35,11 @@ const SidebarSweetButton = () => {
             transition
             cursor-pointer
             "
-            >
-                <FaFeather size={28} color="white"/>
-
-            </div>
-            <div className="
+      >
+        <FaFeather size={28} color="white" />
+      </div>
+      <div
+        className="
             mt-6
             hidden
             lg:block
@@ -52,20 +51,22 @@ const SidebarSweetButton = () => {
             cursor-pointer
             transition
             "
-            >
-            <p className="
+      >
+        <p
+          className="
             hidden
             lg:block
             text-center
             font_semibold
             text-white
             text-[20px]
-            ">
-              Sweet  
-            </p>
-            </div>
-        </div>
-      );
-}
- 
+            "
+        >
+          Sweet
+        </p>
+      </div>
+    </div>
+  );
+};
+
 export default SidebarSweetButton;

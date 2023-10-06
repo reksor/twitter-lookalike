@@ -1,53 +1,46 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../libs/prismaDb"
-import  comment  from "../comments";
+import prisma from "../../../libs/prismaDb";
+import comment from "../comments";
 
 export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
+  req: NextApiRequest,
+  res: NextApiResponse
 ) {
-    if(req.method !=="GET"){
-        return res.status(405).end();
+  if (req.method !== "GET") {
+    return res.status(405).end();
+  }
+
+  try {
+    const { postId } = req.query;
+
+    if (!postId || typeof postId !== "string") {
+      throw new Error("Invalid ID");
     }
 
-    try{
-        const {postId}=req.query;
+    const post = await prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+      include: {
+        user: true,
+        comments: {
+          include: {
+            user: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+      },
+    });
 
-        if(!postId || typeof postId!=="string"){
-            throw new Error("Invalid ID")
-        }
+    // console.log("Gosho",post);
 
-        const post= await prisma.post.findUnique({
-            where: {
-                id: postId
-            },
-            include: {
-                user: true,
-                comments: {
-                    include:{
-                        user:true,
-                        
+    // console.log("POST IN POSTS");
 
-                    },
-                    orderBy:{
-                        createdAt: 'desc'
-                    }
-                },
-            },
-        });
-      
-
-        // console.log("Gosho",post);
-
-        // console.log("POST IN POSTS");
-        
-
-
-        return res.status(200).json(post)
-
-    }catch(error){
-        console.log(error);
-        return res.status(400).end()
-        
-    }
+    return res.status(200).json(post);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).end();
+  }
 }

@@ -1,6 +1,6 @@
-import axios from "axios"
+import axios from "axios";
 import { useCallback, useState } from "react";
-import {toast} from 'react-hot-toast'
+import { toast } from "react-hot-toast";
 import { signIn } from "next-auth/react";
 
 import useLoginModal from "@/hooks/useLoginModal";
@@ -10,135 +10,138 @@ import Input from "../Input";
 import Modal from "../Modal";
 
 const RegisterModal = () => {
-    const loginModal=useLoginModal();
-    const registerModal=useRegisterModal();
+  const loginModal = useLoginModal();
+  const registerModal = useRegisterModal();
 
-    const [email,setEmail]=useState('');
-    const [password,setPassword]=useState('');
-    const [name,setName]=useState('');
-    const [username,setUsername]=useState('');
-    const [isLoading,setIsLoading]=useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-    const onToggle = useCallback(()=>{
-        if(isLoading){
-            return;
-        }
+  const onToggle = useCallback(() => {
+    if (isLoading) {
+      return;
+    }
 
-        registerModal.onClose();
-        loginModal.onOpen();
+    registerModal.onClose();
+    loginModal.onOpen();
+  }, [isLoading, registerModal, loginModal]);
 
-    },[isLoading,registerModal,loginModal])
+  const onSubmit = useCallback(async () => {
+    try {
+      setIsLoading(true);
 
-    const onSubmit=useCallback(async()=>{
-        try{
-            setIsLoading(true);
+      //extract body from register.ts and store here
 
-            //extract body from register.ts and store here
+      if (!email || !username || !password || !name) {
+        toast.error("Missing fieled");
+        return;
+      }
 
-            if(!email || !username|| !password|| !name){
-                toast.error("Missing fieled")
-                return
-            }
+      if (password.length < 6) {
+        toast.error("Password must be at least 6 letters");
+        return;
+      }
 
-            if(password.length < 6){
-                toast.error("Password must be at least 6 letters")
-                return
-            }
+      let check = email;
+      if (check.split(check) && !check.includes("@")) {
+        toast.error("Must be a valid E-mail");
+        return;
+      }
 
-            let check=email;
-            if(check.split(check) && !check.includes("@")){
-                toast.error("Must be a valid E-mail")
-                return
-            }
+      await axios.post("/api/register", {
+        email,
+        password,
+        username,
+        name,
+      });
 
-            await axios.post('/api/register',{
-                email,
-                password,
-                username,
-                name
-            });
+      toast.success("Account created, SWEEET!");
 
-            toast.success("Account created, SWEEET!");
+      signIn("credentials", {
+        email,
+        password,
+      });
 
-            signIn('credentials',{
-                email,
-                password
-            })
+      //TODO add register and login
 
-            //TODO add register and login
+      registerModal.onClose();
+    } catch (error) {
+      console.log(error);
+      toast.error("E-mail already taken :/");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [registerModal, email, password, username, name]);
 
-            registerModal.onClose()
-
-        } catch(error){
-            console.log(error);
-            toast.error("E-mail already taken :/")
-            
-        }finally{
-            setIsLoading(false)
-        }
-    },[registerModal,email,password,username,name]);
-
-const bodyContent=(
+  const bodyContent = (
     <div className="flex flex-col gap-4">
-        <Input 
+      <Input
         placeholder="Email"
-        onChange={(e)=>setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
         value={email}
         disabled={isLoading}
-        />
-        <Input 
+      />
+      <Input
         placeholder="Name"
-        onChange={(e)=>setName(e.target.value)}
+        onChange={(e) => setName(e.target.value)}
         value={name}
         disabled={isLoading}
-        />
-        <Input 
+      />
+      <Input
         placeholder="Username"
-        onChange={(e)=>setUsername(e.target.value)}
+        onChange={(e) => setUsername(e.target.value)}
         value={username}
         disabled={isLoading}
-        />
-          <Input 
+      />
+      <Input
         placeholder="Password"
         type="password"
-        onChange={(e)=>setPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
         value={password}
         disabled={isLoading}
-        />
+      />
     </div>
-)
+  );
 
-const footerContent=(
-    <div className="
+  const footerContent = (
+    <div
+      className="
     text-neutral-400 
     text-center 
     mt-4
-    ">
-        <p>Already have an account? 
-            <span
-            onClick={onToggle}
-            className="
+    "
+    >
+      <p>
+        Already have an account?
+        <span
+          onClick={onToggle}
+          className="
             text-white
             cursor-pointer
             hover:underline
             "
-            > Sign in</span>
-        </p>
+        >
+          {" "}
+          Sign in
+        </span>
+      </p>
     </div>
-)
+  );
 
-    return (
-        <Modal 
-        disabled={isLoading}
-        isOpen={registerModal.isOpen}
-        title="Create an account"
-        actionLabel="Register"
-        onClose={registerModal.onClose}
-        onSubmit={onSubmit}
-        body={bodyContent}
-        footer={footerContent}
-        />
-      );
-}
- 
+  return (
+    <Modal
+      disabled={isLoading}
+      isOpen={registerModal.isOpen}
+      title="Create an account"
+      actionLabel="Register"
+      onClose={registerModal.onClose}
+      onSubmit={onSubmit}
+      body={bodyContent}
+      footer={footerContent}
+    />
+  );
+};
+
 export default RegisterModal;

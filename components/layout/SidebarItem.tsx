@@ -7,42 +7,42 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import useLoginModal from "@/hooks/useLoginModal";
 import LoginModal from "../modals/LoginModal";
 
-interface SiderbarItemProps{
-    label: string;
-    href?: string;
-    icon: IconType;
-    onClick?: ()=> void;
-    auth?: boolean;
-    alert?: boolean;
+interface SiderbarItemProps {
+  label: string;
+  href?: string;
+  icon: IconType;
+  onClick?: () => void;
+  auth?: boolean;
+  alert?: boolean;
 }
 
 const SidebarItem: React.FC<SiderbarItemProps> = ({
-    label,
-    href,
-    icon: Icon,
-    onClick,
-    auth,
-    alert
+  label,
+  href,
+  icon: Icon,
+  onClick,
+  auth,
+  alert,
 }) => {
-    //--------------------------<<<<<<<<<<<<<<<<<<<<
-    const loginModal= useLoginModal()
-    const {data: currentUser}=useCurrentUser()
-    const router = useRouter()
-    const handleClick= useCallback(()=>{
-        if(onClick){
-            return onClick()
-        }
-        if(auth && !currentUser){
-            loginModal.onOpen()
-        }
-        else if(href){
-        router.push(href)
-        }
-},[router,onClick,href,currentUser,auth,loginModal]);
+  //--------------------------<<<<<<<<<<<<<<<<<<<<
+  const loginModal = useLoginModal();
+  const { data: currentUser } = useCurrentUser();
+  const router = useRouter();
+  const handleClick = useCallback(() => {
+    if (onClick) {
+      return onClick();
+    }
+    if (auth && !currentUser) {
+      loginModal.onOpen();
+    } else if (href) {
+      router.push(href);
+    }
+  }, [router, onClick, href, currentUser, auth, loginModal]);
 
-    return (
-        <div onClick={handleClick} className="flex flex-row items-center">
-            <div className="
+  return (
+    <div onClick={handleClick} className="flex flex-row items-center">
+      <div
+        className="
             relative
             rounded-full
             h-14
@@ -55,11 +55,15 @@ const SidebarItem: React.FC<SiderbarItemProps> = ({
             hover:bg-opacity-10
             cursor-pointer
             lg:hidden
-            ">
-                <Icon size={29} color="red"/>
-                {alert? <BsDot className="text-white absolute -top-4 left-0" size={70}/> : null}
-            </div>
-            <div className="
+            "
+      >
+        <Icon size={29} color="red" />
+        {alert ? (
+          <BsDot className="text-white absolute -top-4 left-0" size={70} />
+        ) : null}
+      </div>
+      <div
+        className="
             relative
             hidden
             lg:flex
@@ -70,16 +74,16 @@ const SidebarItem: React.FC<SiderbarItemProps> = ({
             hover:bg-slate-300
             hover:bg-opacity-10
             cursor-pointer
-            ">
-                <Icon size={29} color="red"/>
-                <p className="hidden lg:block text-white text-xl">
-                    {label}
-                </p>
-                {alert? <BsDot className="text-white absolute -top-4 left-0" size={70}/> : null}
+            "
+      >
+        <Icon size={29} color="red" />
+        <p className="hidden lg:block text-white text-xl">{label}</p>
+        {alert ? (
+          <BsDot className="text-white absolute -top-4 left-0" size={70} />
+        ) : null}
+      </div>
+    </div>
+  );
+};
 
-            </div>
-        </div>
-      );
-}
- 
 export default SidebarItem;

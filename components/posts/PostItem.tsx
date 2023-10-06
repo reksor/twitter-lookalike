@@ -5,81 +5,80 @@ import { formatDistanceToNowStrict } from "date-fns";
 import useLoginModal from "@/hooks/useLoginModal";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Avatar from "../Avatar";
-import {  AiOutlineDelete, AiOutlineMessage } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineMessage } from "react-icons/ai";
 import { AiOutlineGift, AiFillGift } from "react-icons/ai";
 import useLike from "@/hooks/useLike";
 import useDelete from "@/hooks/useDelete";
 import { redirect } from "next/dist/server/api-utils";
 
-
-interface PostItemProps{
-    
-    data: Record<string, any>;
-    userId?: string
+interface PostItemProps {
+  data: Record<string, any>;
+  userId?: string;
 }
 
-const PostItem: React.FC<PostItemProps> = ({
-    data={},
-    userId
-}) => {
+const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
+  const router = useRouter();
+  const loginModal = useLoginModal();
 
-const router =useRouter()
-const loginModal=useLoginModal();
+  const { data: currentUser } = useCurrentUser();
+  const { hasLiked, toggleLike } = useLike({ postId: data.id, userId });
+  const { isCreator, toggleDelete } = useDelete({ postId: data.id, userId });
 
-const {data: currentUser}=useCurrentUser();
-const {hasLiked, toggleLike}=useLike({postId: data.id, userId})
-const {isCreator, toggleDelete}=useDelete({postId: data.id, userId})
+  const goToUser = useCallback(
+    (event: any) => {
+      //overwrite global onClick parant
+      event.stopPropagation();
 
-const goToUser=useCallback((event:any)=>{
-    //overwrite global onClick parant
-event.stopPropagation();
-    
-router.push(`/users/${data.user.id}`);
-},[router, data.user.id]);
+      router.push(`/users/${data.user.id}`);
+    },
+    [router, data.user.id]
+  );
 
-const goToPost = useCallback(()=>{
-    router.push(`/posts/${data.id}`)
-},[router, data.id]);
+  const goToPost = useCallback(() => {
+    console.log(` this is${data}`);
 
-const onLike = useCallback((event: any)=>{
+    router.push(`/posts/${data.id}`);
+  }, [router, data.id]);
 
-event.stopPropagation();
+  const onLike = useCallback(
+    (event: any) => {
+      event.stopPropagation();
 
-if(!currentUser){
-return loginModal.onOpen();
-}
+      if (!currentUser) {
+        return loginModal.onOpen();
+      }
 
-toggleLike()
+      toggleLike();
+    },
+    [loginModal, currentUser, toggleLike]
+  );
 
-},[loginModal,currentUser,toggleLike]);
+  const onDelete = useCallback(
+    (event: any) => {
+      event.stopPropagation();
+      if (!currentUser) {
+        return loginModal.onOpen();
+      }
+      toggleDelete();
+      router.push(`/`);
+    },
+    [loginModal, currentUser, toggleDelete]
+  );
 
+  const createdAt = useMemo(() => {
+    if (!data?.createdAt) {
+      return null;
+    }
 
-const onDelete = useCallback((event: any)=>{
-event.stopPropagation();
-if(!currentUser){
-    return loginModal.onOpen()
-}
-toggleDelete()
-router.push(`/`)
+    return formatDistanceToNowStrict(new Date(data.createdAt));
+  }, [data.createdAt]);
 
-},[loginModal,currentUser,toggleDelete])
+  const LikeIcon = hasLiked ? AiFillGift : AiOutlineGift;
 
-const createdAt = useMemo(()=>{
-if(!data?.createdAt) {
-    return null;
-}
-
-return formatDistanceToNowStrict(new Date(data.createdAt))
-},[data.createdAt]);
-
-const LikeIcon= hasLiked? AiFillGift : AiOutlineGift;
-
-
-
-    return ( 
-        <div 
-        onClick={goToPost}
-        className="
+  return (
+    <div
+      onClick={goToPost}
+      className="
         border-b-[1px]
         border-neutral-800
         p-5
@@ -87,41 +86,41 @@ const LikeIcon= hasLiked? AiFillGift : AiOutlineGift;
         hover:bg-neutral-700
         transition
         "
-        >
-        <div className="flex flex-row items-start gap-3">
-            <Avatar userId={data.user.id}/>
-            
-             <div>
-                <div className="
+    >
+      <div className="flex flex-row items-start gap-3">
+        <Avatar userId={data.user.id} />
+
+        <div>
+          <div
+            className="
                 flex flex-row items-center gap-2
-                ">
-                    <p 
-                    onClick={goToUser}
-                    className="text-white font-semibold cursor-pointer hover:underline">
-                        {data.user.name}
-                    </p>
-                    <span 
-                    onClick={goToUser}
-                    className="
+                "
+          >
+            <p
+              onClick={goToUser}
+              className="text-white font-semibold cursor-pointer hover:underline"
+            >
+              {data.user.name}
+            </p>
+            <span
+              onClick={goToUser}
+              className="
                     text-red-600
                     cursor-pointer
                     hover:underline
                     hidden
                     md:block
-                    ">
-                        @{data.user.username}
-                    </span>
-                    <span className="text-neutral-500 text-sm">
-                    {createdAt}
-                    </span>
-                    </div>
-                    <div className="text-white mt-1">
-                    {data.body}
-                    </div>
-                    <div className="flex flex-row items-center mt-3 gap-10">
-                    <div
-                        onClick={()=>{}}
-                        className="
+                    "
+            >
+              @{data.user.username}
+            </span>
+            <span className="text-neutral-500 text-sm">{createdAt}</span>
+          </div>
+          <div className="text-white mt-1">{data.body}</div>
+          <div className="flex flex-row items-center mt-3 gap-10">
+            <div
+              onClick={() => {}}
+              className="
                         flex
                         flex-row
                         items-center
@@ -131,63 +130,56 @@ const LikeIcon= hasLiked? AiFillGift : AiOutlineGift;
                         transition
                         hover:text-red-600
                         "
-                        >
-                            <AiOutlineMessage size={20}/>
-                            <p>
-                                {data.comments?.length || 0}
-                            </p>
-                        </div>
-                        
-                        <div
-                        onClick={onLike}
-                        className="
-                        flex
-                        flex-row
-                        items-center
-                        text-neutral-500
-                        gap-2
-                        cursor-pointer
-                        transition
-                        hover:text-red-600
-                        "
-                        >
-                            <LikeIcon size={20} color={hasLiked? "red": ""}/>
-                            <p>
-                                {data.likedIds?.length}
-                            </p>
-                        </div>
-                    
-                        <div
-                        onClick={onDelete}
-                        className="
-                        flex
-                        flex-row
-                        items-center
-                        text-neutral-500
-                        gap-2
-                        cursor-pointer
-                        transition
-                        hover:text-red-600
-                        "
-                        >
-                            <AiOutlineDelete size={20} visibility={isCreator? 'visible' : 'hidden'}/>
-                            <p>
-                                
-                            </p>
-                           
-                        </div>
-
-                       
-                    </div>
-
-                </div>
+            >
+              <AiOutlineMessage size={20} />
+              <p>{data.comments?.length || 0}</p>
             </div>
+
+            <div
+              onClick={onLike}
+              className="
+                        flex
+                        flex-row
+                        items-center
+                        text-neutral-500
+                        gap-2
+                        cursor-pointer
+                        transition
+                        hover:text-red-600
+                        "
+            >
+              <LikeIcon size={20} color={hasLiked ? "red" : ""} />
+              <p>{data.likedIds?.length}</p>
+            </div>
+
+            <div
+              onClick={onDelete}
+              className="
+                        flex
+                        flex-row
+                        items-center
+                        text-neutral-500
+                        gap-2
+                        cursor-pointer
+                        transition
+                        hover:text-red-600
+                        "
+            >
+              <AiOutlineDelete
+                size={20}
+                visibility={isCreator ? "visible" : "hidden"}
+              />
+              <p></p>
+            </div>
+          </div>
         </div>
-     );
-}
- 
+      </div>
+    </div>
+  );
+};
+
 export default PostItem;
 
 function toggleDelete() {
-    throw new Error("Function not implemented.");
+  throw new Error("Function not implemented.");
 }
