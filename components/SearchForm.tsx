@@ -1,8 +1,5 @@
-import axios from "axios";
-
 import { useCallback, useState } from "react";
 
-import usePosts from "@/hooks/usePosts";
 import useSearch from "@/hooks/useSearch";
 import Button from "./Button";
 import SearchPostFeed from "./posts/SearchFeed";
