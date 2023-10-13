@@ -31,12 +31,6 @@ const Search = () => {
   const search = useSearchParams();
   const searchQuery = search ? search.get("q") : null;
 
-  // const { input } = router.query;
-
-  // const { data: fetchedPosts, isLoading } = useSearch(input as string);
-
-  // console.log(input);
-
   // if (isLoading || !fetchedPosts) {
   //   return (
   //     <div className="flex justify-center items-center h-full">

@@ -7,35 +7,31 @@ import { useRouter } from "next/router";
 import { ClipLoader } from "react-spinners";
 
 const PostView = () => {
-const router= useRouter()
-const {postId}=router.query;
+  const router = useRouter();
+  const { postId } = router.query;
 
-const {data:fetchedPost, isLoading}=usePost(postId as string)
+  const { data: fetchedPost, isLoading } = usePost(postId as string);
 
-    if(isLoading || !fetchedPost){
-        return(
-            <div className="flex justify-center items-center h-full">
-                <ClipLoader color="red" size={80}/>
-            </div>
-        )
-    }
+  if (isLoading || !fetchedPost) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <ClipLoader color="red" size={80} />
+      </div>
+    );
+  }
 
-    //console.log(fetchedPost, "THIS IS IT");
-
-    
-    return ( 
+  return (
     <>
-    <Header label="Sweet" showBackArrow/>
-    <PostItem data={fetchedPost}/>
-    <Form
-    postId={postId as string}
-    isComment
-    placeholder="Something sweet to say?"
-    />
-    <CommentFeed
-    comments={fetchedPost?.comments}
-    />
-    </>);
-}
- 
+      <Header label="Sweet" showBackArrow />
+      <PostItem data={fetchedPost} />
+      <Form
+        postId={postId as string}
+        isComment
+        placeholder="Something sweet to say?"
+      />
+      <CommentFeed comments={fetchedPost?.comments} />
+    </>
+  );
+};
+
 export default PostView;
