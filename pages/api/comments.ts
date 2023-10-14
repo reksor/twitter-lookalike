@@ -88,7 +88,7 @@ export default async function handler(
     // console.log("COMMENT SHOULD BE HERE",comment);
     // console.log(body);
 
-    console.log("POST IN comments");
+    // console.log("POST IN comments");
 
     return res.status(200).json(comment);
   } catch (error) {

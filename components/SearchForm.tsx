@@ -1,9 +1,10 @@
 import { useCallback, useState } from "react";
 
-import useSearch from "@/hooks/useSearch";
 import Button from "./Button";
 import SearchPostFeed from "./posts/SearchFeed";
 import { useRouter } from "next/navigation";
+import Avatar from "./Avatar";
+import useUsers from "@/hooks/useUsers";
 
 interface SearchProps {
   placeholder?: string;
@@ -14,7 +15,22 @@ interface SearchProps {
 const SearchForm: React.FC<SearchProps> = ({ placeholder, postId, value }) => {
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { data: users = [] } = useUsers();
   const router = useRouter();
+
+  let modUsers: Record<string, any>[] = [];
+
+  users.filter((user: { username: string | string[] }) => {
+    if (body === "") {
+      return;
+    }
+    if (modUsers.length >= 3) {
+      return;
+    }
+    if (user.username.includes(body)) {
+      modUsers.push(user);
+    }
+  });
 
   const onSearch = () => {
     const encodedSearchQuery = encodeURI(body);
@@ -64,6 +80,24 @@ const SearchForm: React.FC<SearchProps> = ({ placeholder, postId, value }) => {
             />
           </div>
         </div>
+      </div>
+      <div className="flex flex-col gap-6 mt-4">
+        {modUsers.map((user: Record<string, any>) => (
+          <div
+            key={user.id}
+            className="flex felx-row gap-4 hover:opacity-90 cursor-pointer"
+            onClick={() => {
+              const url = `/users/${user.id}`;
+              router.push(url);
+            }}
+          >
+            <Avatar userId={user.id} />
+            <div className="flex flex-col">
+              <p className="text-white font-semibold text-sm">{user.name}</p>
+              <p className="text-red-600 text-sm">@{user.username}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

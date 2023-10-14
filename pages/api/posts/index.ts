@@ -46,7 +46,7 @@ export default async function handler(
           },
         });
       } else {
-        console.log("POST IN index else");
+        // console.log("POST IN index else");
         posts = await prisma.post.findMany({
           include: {
             user: true,

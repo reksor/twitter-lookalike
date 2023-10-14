@@ -12,11 +12,9 @@ const SearchPostFeed: React.FC<SearchFeedProps> = ({ input, userId }) => {
 
   let modPosts: Record<string, any>[] = [];
 
-  //   console.log(posts);
   posts.filter((post: { body: (string | undefined)[] }) => {
     if (post.body.includes(input)) {
       modPosts.push(post);
-      //   console.log(`${post.body} post includes input`);
     }
   });
 
