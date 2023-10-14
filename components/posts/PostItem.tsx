@@ -35,7 +35,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
   );
 
   const goToPost = useCallback(() => {
-    console.log(` this is${data}`);
+    // console.log(` this is${data}`);
 
     router.push(`/posts/${data.id}`);
   }, [router, data.id]);
