@@ -9,10 +9,17 @@ import useEditModal from "@/hooks/useEditModal";
 import Modal from "../Modal";
 import Input from "../Input";
 import ImageUpload from "../ImageUpload";
+// import { UploadButton } from "@/src/utils/uploadthing";
+import Link from "next/link";
+import { UploadDropzone } from "@/src/utils/uploadthing";
+import Image from "next/image";
+import ImageUp from "../ImageUp";
 
 const EditModal = () => {
   const { data: currentUser } = useCurrentUser();
   const { mutate: mutateFetchedUser } = useUser(currentUser?.id);
+
+  const [imageUrl, setImageUrl] = useState("");
 
   const editModal = useEditModal();
 
@@ -74,18 +81,23 @@ const EditModal = () => {
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <ImageUpload
-        value={profileImage}
-        disabled={isLoading}
+      <ImageUp
         onChange={(image) => setProfileImage(image)}
+        value={profileImage}
         label="Upload profile picture"
       />
-      <ImageUpload
+
+      <ImageUp
+        onChange={(image) => setCoverImage(image)}
+        value={coverImage}
+        label="Upload cover picture"
+      />
+      {/* <ImageUpload
         value={coverImage}
         disabled={isLoading}
         onChange={(image) => setCoverImage(image)}
         label="Upload cover picture"
-      />
+      /> */}
       <Input
         placeholder="Name"
         onChange={(e) => setName(e.target.value)}

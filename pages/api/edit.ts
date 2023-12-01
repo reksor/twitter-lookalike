@@ -1,4 +1,3 @@
-import { log } from "console";
 import { NextApiRequest, NextApiResponse } from "next";
 
 import serverAuth from "@/libs/serverAuth";

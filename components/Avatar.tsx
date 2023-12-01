@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import useUser from "@/hooks/useUser";
 import Image from "next/image";
+import ProfilePic from "../public/images/placeholder.png";
 
 interface AvatarProps {
   userId: string;
@@ -47,7 +48,8 @@ const Avatar: React.FC<AvatarProps> = ({ userId, isLarge, hasBorder }) => {
         }}
         alt="Avatar"
         onClick={onClick}
-        src={fetchUser?.profileImage || "/images/placeholder.png"}
+        src={fetchUser?.profileImage || ProfilePic}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       />
     </div>
   );
